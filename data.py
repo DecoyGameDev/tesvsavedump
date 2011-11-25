@@ -111,6 +111,14 @@ class _CHANGEDFORM(object):
         self.len_1     = 0
         self.len_2     = 0
         self.data      = ''
+        
+    def __str__(self):
+        if self.len_2 == 0:
+            return str.format("DataLen {0} Version {1}", 
+            self.len_1, self.version)
+        else:
+            return str.format("Compressed DataLen {0} Uncompressed DataLen {1} Version {2}", 
+            self.len_1, self.len_2, self.version)        
     
 # FILE OBJECT UTILITY
 def f_num(fmt, fobj):

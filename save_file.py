@@ -200,6 +200,15 @@ class SaveGame(object):
             print data.h_dump(rec.data)
             rec_n += 1
             
+        print "\nCHANGED FORMS:"
+        rec_n = 1
+        for cf in self.changed_forms:
+            print str.format("""\nRec n. {0} {1}""", 
+            rec_n, cf)
+            if cf.len_1 > 0:
+                print data.h_dump(cf.data)
+            rec_n += 1            
+            
         print "\nUNKNOWN TABLE 3:"
         for rec in self.unknown_table3:
             print rec
