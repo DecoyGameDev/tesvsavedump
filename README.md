@@ -1,8 +1,10 @@
 # Brief instructions for tesvsavedump
 
 WHAT IS THIS?
+
     tesvsavedump will decode a TESV: Skyrim game save file and dump into
     a more human friendly format.
+    
     WARNING: Not all the fields are decoded and you may run into a lot of hex code
              I suppose you can read it :)
 
