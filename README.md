@@ -1,18 +1,31 @@
-# README for a newly created project.
+# Brief instructions for tesvsavedump
 
-There are a couple of things you should do first, before you can use all of Git's power:
+WHAT IS THIS?
+tesvsavedump will decode a TESV: Skyrim game save file and dump into
+a more human friendly format.
+WARNING: Not all the fields are decoded and you may run into a lot of hex code
+         I suppose you can read it :)
 
-  * Add a remote to this project: in the Cloud9 IDE command line, you can execute the following commands
-    `git remote add [remote name] [remote url (eg. 'git@github.com:/ajaxorg/node_chat')]` [Enter]
-  * Create new files inside your project
-  * Add them to to Git by executing the following command
-    `git add [file1, file2, file3, ...]` [Enter]
-  * Create a commit which can be pushed to the remote you just added
-    `git commit -m 'added new files'` [Enter]
-  * Push the commit the remote
-    `git push [remote name] master` [Enter]
-
-That's it! If this doesn't work for you, please visit the excellent resources from [Github.com](http://help.github.com) and the [Pro Git](http://http://progit.org/book/) book.
-If you can't find your answers there, feel free to ask us via Twitter (@cloud9ide), [mailing list](groups.google.com/group/cloud9-ide) or IRC (#cloud9ide on freenode).
-
-Happy coding!
+REQUISITES:
+    . python 2.7.2
+    
+INSTALLATION:
+    Copy/Extract data.py and save_file.py into a directory of your choice
+    
+USAGE:
+    Open a terminal/command prompt and cd to the installation directory
+    e.g cd C:\tesvsavedump
+    e.g cd ~/tesvsavedump
+    
+    run the following:
+    > python save_file.py [path_to_save_file]
+    
+    the program will dump the file to the console, if you want to dump into
+    a file do:
+    
+    > python save_file.py [path_to_save_file] > [path_to_dump_file]
+    
+CONTRIBUTIONS:
+If you can decode/reverse engineer any of the fields please do so and modify 
+the code, or tell me how to do it.
+You can open an issue here on github to contact me.
