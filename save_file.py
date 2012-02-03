@@ -69,6 +69,14 @@ class SaveGame(object):
                 
         return True
         
+    def parse_step_2(self):
+        self.global_data = []
+        for itm in (self.global_data_table1 +
+                    self.global_data_table2 +
+                    self.global_data_table3):
+            self.global_data.append( globdata.gdata_factory(itm) )
+            
+        
     def parse_header(self, fp):
         self.file_magic = data.f_string(13, fp)
         self.hd_size    = data.f_uint32(fp)

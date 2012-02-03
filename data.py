@@ -57,7 +57,7 @@ class _FILETIME(object):
   def __str__(self):
     return "%d %d" % (self.dwLowDateTime, self.dwHighDateTime)
 
-_GLOBALDATATYPES = {0:'Misc Stats',
+_GLOBALDATATYPES = {    0:'Misc Stats',
                         1:'Player Location',
                         2:'TES',
                         3:'Global Variables',
@@ -93,7 +93,19 @@ class _GLOBALDATA(object):
         self.type_ = 0
         self.len_  = 0
         self.data  = ''
-        
+    
+    @property
+    def datatype(self):
+        return self.type_
+    
+    @property
+    def datalen(self):
+        return self.len_
+    
+    @property
+    def data(self):
+        return self.data_
+    
     def __str__(self):
         type_str = 'N/A'
         if self.type_ in _GLOBALDATATYPES:
@@ -169,14 +181,12 @@ f_hash    = f_uint64
 f_lstring = f_ulong
     
 def f_bstring(fobj):
-    len_ = f_short(fobj)
-    if len_ > 1000:
-        raise Exception('string too long')
+    len_ = f_byte(fobj)
     data_ = unpack_from('%ds' % len_, fobj.read(len_))[0]
     return data_
     
 def f_bzstring(fobj):    
-    len_ = unpack_from('<H', fobj.read(2))[0] + 1
+    len_ = f_byte(fobj) + 1
     data_ = unpack_from('%ds' % len_, fobj.read(len_))[0]
     return data_
     
@@ -190,6 +200,18 @@ def f_zstring(fobj):
 
 def f_string(size, fobj):
     return unpack_from('%ds' % size, fobj.read(size))[0]
+    
+def f_wstring(fobj):
+    len_ = f_short(fobj)
+    if len_ > 1000:
+        raise Exception('string too long')
+    data_ = unpack_from('%ds' % len_, fobj.read(len_))[0]
+    return data_
+    
+def f_wzstring(fobj):    
+    len_ = unpack_from('<H', fobj.read(2))[0] + 1
+    data_ = unpack_from('%ds' % len_, fobj.read(len_))[0]
+    return data_    
      
 def f_buf(size, fobj):
     return fobj.read(size)
