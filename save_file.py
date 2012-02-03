@@ -5,6 +5,7 @@
 
 import os
 import data
+import globdata
 
 class SaveGame(object):
     def __init__(self):
@@ -65,7 +66,7 @@ class SaveGame(object):
             #print 'unknown table3 count: %d' % self.unknown_table3_count
             if self.unknown_table3_count > 0:                
                 for i in xrange(0, self.unknown_table3_count):
-                    self.unknown_table3.append( data.f_bstring(fp) )
+                    self.unknown_table3.append( data.f_wstring(fp) )
                 
         return True
         
@@ -74,19 +75,20 @@ class SaveGame(object):
         for itm in (self.global_data_table1 +
                     self.global_data_table2 +
                     self.global_data_table3):
-            self.global_data.append( globdata.gdata_factory(itm) )
-            
+            obj = globdata.gdata_factory(itm)
+            if obj:
+                self.global_data.append(obj)
         
     def parse_header(self, fp):
         self.file_magic = data.f_string(13, fp)
         self.hd_size    = data.f_uint32(fp)
         self.version    = data.f_uint32(fp)
         self.save_num   = data.f_uint32(fp)
-        self.player_nm  = data.f_bstring(fp)
+        self.player_nm  = data.f_wstring(fp)
         self.player_lvl = data.f_uint32(fp)
-        self.player_loc = data.f_bstring(fp)
-        self.ingame_dt  = data.f_bstring(fp)
-        self.player_race = data.f_bstring(fp)
+        self.player_loc = data.f_wstring(fp)
+        self.ingame_dt  = data.f_wstring(fp)
+        self.player_race = data.f_wstring(fp)
         self.unknown_1 = data.f_uint16(fp)
         self.unknown_2 = data.f_float(fp)
         self.unknown_3 = data.f_float(fp)
@@ -101,7 +103,7 @@ class SaveGame(object):
         self.plugin_count     = data.f_uint8(fp)
         self.plugins          = []
         for i in xrange(0, self.plugin_count):
-            self.plugins.append( data.f_bstring(fp) )
+            self.plugins.append( data.f_wstring(fp) )
         
     def parse_file_location_table(self, fp):
         self.unknown_table1_offset   = data.f_uint32(fp)
@@ -221,6 +223,10 @@ class SaveGame(object):
         for rec in self.unknown_table3:
             print rec
             
+        print "\n#####################\n"
+        for itm in self.global_data:
+            print str(itm) + "\n"            
+            
     def __str__(self):
         return str.format("""\
         File Magic   :   {0}
@@ -259,6 +265,7 @@ def main():
     import sys   
     save_game = SaveGame()
     save_game.parse_full(sys.argv[1])
+    save_game.parse_step_2()
     #save_game.parse_lite_2(sys.argv[1])
     save_game.dump_text()
     

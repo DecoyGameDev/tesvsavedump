@@ -5,6 +5,7 @@
 
 from struct import unpack, unpack_from, calcsize
 import string
+import os
 
 class _SYSTEMTIME(object):
   #WORD wYear;
@@ -92,7 +93,7 @@ class _GLOBALDATA(object):
     def __init__(self):
         self.type_ = 0
         self.len_  = 0
-        self.data  = ''
+        self.data_ = ''
     
     @property
     def datatype(self):
@@ -105,7 +106,11 @@ class _GLOBALDATA(object):
     @property
     def data(self):
         return self.data_
-    
+        
+    @data.setter
+    def data(self, value):
+        self.data_ = value
+        
     def __str__(self):
         type_str = 'N/A'
         if self.type_ in _GLOBALDATATYPES:
@@ -165,8 +170,25 @@ def f_uint64(fobj):
 def f_char(fobj):
     return chr(f_int8(fobj))
 
-def f_float(fobj):
+def f_float32(fobj):
     return f_num('f', fobj)
+    
+def f_float64(fobj):
+    return f_num('d', fobj)    
+    
+def f_vsval(fobj):
+    import sys
+    first_byte = f_byte(fobj)
+    len_ = (first_byte & 0x03)
+    sys.stderr.write('vsval len: {0}. first_byte: {1}\n'.format(len_, first_byte))
+    if len_ == 0:
+        return first_byte
+    fobj.seek(-1, os.SEEK_CUR)
+    if len_ == 1:
+        return (f_uint16(fobj) >> 2) | 1
+    elif len_ == 2:
+        return (f_uint32(fobj) >> 2) | 2
+    raise Exception('Invalid vsval field!')
     
 # ALIAS    
 f_byte    = f_int8
@@ -179,6 +201,8 @@ f_formid  = f_ulong
 f_iref    = f_ulong
 f_hash    = f_uint64
 f_lstring = f_ulong
+f_float   = f_float32
+f_double  = f_float64
     
 def f_bstring(fobj):
     len_ = f_byte(fobj)
@@ -228,7 +252,16 @@ def f_filetime(fobj):
     tup  = unpack_from(fmt, fobj.read(size))
     return _FILETIME(tup)
     
-def h_dump(buffer):
+def f_refid(fobj):
+    return f_buf(3, fobj)
+
+def buf2hex(buffer):
+    h_line = ''
+    for c in buffer:
+        h_line += '%02X ' % ord(c)
+    return h_line
+    
+def h_dump(buffer, include_ascii = True):
     i = 0
     lines = []
     h_line  = ''
