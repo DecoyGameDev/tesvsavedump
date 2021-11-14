@@ -87,7 +87,8 @@ _GLOBALDATATYPES = {    0:'Misc Stats',
                         1002:'Anim Objects',
                         1003:'Timer',
                         1004:'Synchronized Animations',
-                        1005:'Main'}                      
+                        1005:'Main'
+                        1006:'OBVvoxCOL12'}                      
     
 class _GLOBALDATA(object):
     def __init__(self):
