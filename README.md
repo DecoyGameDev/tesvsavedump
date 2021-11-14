@@ -1,8 +1,8 @@
-# Brief instructions for tesvsavedump
+# Brief instructions for 04savedump
 
 WHAT IS THIS?
 
-    tesvsavedump will decode a TESV: Skyrim game save file and dump into
+    tesvsavedump will decode a TES4: Obivion game save file and dump into
     a more human friendly format.
     
     WARNING: Not all the fields are decoded and you may run into a lot of hex code
@@ -19,8 +19,8 @@ INSTALLATION:
 USAGE:
     
     Open a terminal/command prompt and cd to the installation directory
-    e.g cd C:\tesvsavedump
-    e.g cd ~/tesvsavedump
+    e.g cd C:\04vsavedump
+    e.g cd ~/04vsavedump
     
     run the following:
     > python save_file.py [path_to_save_file]
